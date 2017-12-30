@@ -1,0 +1,44 @@
+#include <Microduino_Motor.h>
+#define my_Serial Serial //定义串口通讯为Serial
+#define OUT1A 10     //D6，D8控制1A，1B的电机
+#define OUT1B 11void Go();
+void Back();
+void Stop();
+void setup()      //设置数字端口输入输出状态
+{
+Serial.begin(9600); //初始化串口监视器通讯波特率
+Serial.println("init finish");
+my_Serial.begin(9600);//BT通讯波特率
+pinMode(OUT1A, OUTPUT);
+pinMode(OUT1B, OUTPUT);
+}
+char i;
+void loop()
+{
+if(my_Serial.available()>0)
+{
+i=my_Serial.read();
+my_Serial.println(i);  //向蓝牙通信的另一端发送数据
+switch(i)
+{
+case'g':{Go( ); break; }
+case'b': {Back( );   break;}
+case's': {Stop();   break;}
+}
+}
+}
+void Go()//前进程序
+{
+digitalWrite(OUT1A, HIGH);
+digitalWrite(OUT1B, LOW);
+}
+void Back()//后退程序
+{
+digitalWrite(OUT1A, LOW);
+digitalWrite(OUT1B, HIGH);
+}
+void Stop()//停止程序
+{
+digitalWrite(OUT1A, LOW);
+digitalWrite(OUT1B, LOW);
+}
